@@ -1,0 +1,13 @@
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebScrapper.exe.config
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebScrapper.exe
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebScrapper.pdb
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebDriver.dll
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebDriver.xml
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.csproj.ResolveComReference.cache
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.csproj.CopyComplete
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.exe
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.pdb
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.csprojAssemblyReference.cache
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\Database1.mdf
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\Database1_log.ldf
