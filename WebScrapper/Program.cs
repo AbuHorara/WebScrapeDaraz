@@ -11,6 +11,8 @@ using _Excel = Microsoft.Office.Interop.Excel;
 using System.Data.SqlClient;
 using System.Data.Sql;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.PageObjects;
+using SeleniumExtras.WaitHelpers;
 
 namespace WebScrapper
 {
@@ -18,7 +20,7 @@ namespace WebScrapper
     {
         static void Main(string[] args)
         {
-            SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\Database1.mdf;Integrated Security=True");
+            //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\Database1.mdf;Integrated Security=True");
             IWebDriver driver = new ChromeDriver();
             driver.Navigate().GoToUrl("https://www.daraz.pk/");
             var element = driver.FindElement(By.XPath("//*[@id=\"q\"]"));
@@ -27,49 +29,65 @@ namespace WebScrapper
             element.Submit();
             //var price = driver.FindElements(By.ClassName("c3gUW0"));
             var items = driver.FindElements(By.ClassName("c16H9d"));
-            var sales = driver.FindElements(By.ClassName("c15YQ9"));
+            //var sales = driver.FindElements(By.ClassName("c15YQ9"));
             string rating = "";
             string price = "";
             string name = "";
-            //string sku = "";
+            string sku = "";
             string rat = "";
             string month = "";
             string pri = "";
             string subcat = "";
             string[] months = { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-            int count = 0;
+            int count = 1;
             int jan = 0, feb = 0, mar = 0, apr = 0, may = 0, jun = 0, jul = 0, aug = 0, sep = 0, oct = 0, nov = 0, dec = 0;
 
             for (int i = 1; i <= items.Count; i++)
             {
-                //try
-                //{
-                System.Threading.Thread.Sleep(500);
-                driver.FindElement(By.XPath("//*[@id=\"root\"]/div/div[2]/div[1]/div/div[1]/div[2]/div[" + i + "]/div/div/div[2]/div[2]")).Click();
-                    //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+                try
+                {
+                    System.Threading.Thread.Sleep(500);
+                    driver.FindElement(By.XPath("//*[@id=\"root\"]/div/div[2]/div[1]/div/div[1]/div[2]/div[" + i + "]/div/div/div[2]/div[2]")).Click();
+                    driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(300);
                     name = driver.FindElement(By.ClassName("pdp-mod-product-badge-wrapper")).Text.ToString();
                     //System.Threading.Thread.Sleep(1000);
 
                     //sku = driver.FindElement(By.XPath("//*[@id=\"module_product_detail\"]/div/div[1]/div[3]/div/ul/li[2]/div")).Text.ToString();
-                    //sku = driver.FindElements(By.ClassName("key-value"))[0].Text.ToString();
+                    try
+                    {
+                        sku = driver.FindElements(By.ClassName("key-value"))[1].Text.ToString();
+                    }
+                    catch(Exception)
+                    {
+                        sku = driver.FindElements(By.ClassName("key-value"))[0].Text.ToString();
+                    }
                     //System.Threading.Thread.Sleep(1000);
                     price = driver.FindElement(By.ClassName("pdp-price")).Text.ToString();
                     //System.Threading.Thread.Sleep(1000);
                     rating = driver.FindElement(By.ClassName("count")).Text.ToString();
-                Console.WriteLine("Name: "+name);
+                    Console.WriteLine("Name: " + name);
 
-                int indx1;
-                pri = price.Substring(4);
-                string pro = (pri.Split(','))[0];
-                string qty = (pri.Split(','))[1];
-                string pstr = pro + qty;
-                Console.WriteLine("Price: "+pstr);
+                    int indx1;
+                    pri = price.Substring(4);
+                    string pstr = "";
+                    if (pri.Contains(','))
+                    {
+                        string p1 = (pri.Split(','))[0];
+                        string p2 = (pri.Split(','))[1];
+                        pstr = p1 + p2;
+                        Console.WriteLine("Price: " + pstr);
+                    }
+                    else
+                    {
+                        pstr = pri;
+                        Console.WriteLine("Price: " + pstr);
+                    }
                     indx1 = rating.IndexOf(' ');
                     rat = rating.Substring(0, indx1 + 1);
                     int a = Convert.ToInt32(rat);
-                    Console.WriteLine("Rating: "+rat);
+                    Console.WriteLine("Rating: " + rat);
                     //System.Threading.Thread.Sleep(1000);
-                    
+
                     //if (sku == null || sku == "")
                     //{
                     //    sku = driver.FindElements(By.ClassName("key-value"))[0].Text.ToString();
@@ -83,11 +101,16 @@ namespace WebScrapper
                     {
                         Console.WriteLine(0);
                     }
-                    else if(a <= 5)
+                    else if (a <= 5)
                     {
-                        month = driver.FindElements(By.CssSelector(".title.right"))[count].Text.ToString();
+                        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                        IWebElement SearchResult = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(By.XPath("//*[@id=\"module_product_review\"]/div/div[3]/div[1]/div[" + count + "]/div[1]/span")));
+                        month = driver.FindElement(By.XPath("//*[@id=\"module_product_review\"]/div/div[3]/div[1]/div[" + count + "]/div[1]/span")).Text.ToString();
+                        //month = driver.FindElements(By.CssSelector(".title.right"))[count].Text.ToString();
+                        System.Threading.Thread.Sleep(1000);
                         string m = month.Substring(3, 3);
-                        count = 0;
+                        
+                        count = 1;
                         jan = 0; feb = 0; mar = 0; apr = 0; may = 0; jun = 0; jul = 0; aug = 0; sep = 0; oct = 0; nov = 0; dec = 0;
                         if (m.Equals("Jan"))
                         {
@@ -141,11 +164,17 @@ namespace WebScrapper
                     }
                     else
                     {
-                        
+
                         for (int j = 0; j < a; j++)
                         {
-
-                            month = driver.FindElements(By.CssSelector(".title.right"))[count].Text.ToString();
+                            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                            IWebElement SearchResult = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(By.XPath("//*[@id=\"module_product_review\"]/div/div[3]/div[1]/div[" + count + "]/div[1]/span")));
+                            month = driver.FindElement(By.XPath("//*[@id=\"module_product_review\"]/div/div[3]/div[1]/div[" + count + "]/div[1]/span")).Text.ToString();
+                            //month = driver.FindElements(By.CssSelector(".title.right"))[count].Text.ToString();
+                            //foreach(char k in month)
+                            //{
+                            //    Console.WriteLine(month);
+                            //}
                             string m = month.Substring(3, 3);
                             if (j % 5 == 0)
                             {
@@ -153,8 +182,9 @@ namespace WebScrapper
                                 var button = driver.FindElement(By.ClassName("next-icon-last"));
                                 System.Threading.Thread.Sleep(1000);
                                 button.Click();
-                                count = 0;
+                                count = 1;
                             }
+
                             else
                             {
                                 count++;
@@ -212,85 +242,43 @@ namespace WebScrapper
                         }
 
                     }
-                    Console.WriteLine("January: " + jan);
-                    Console.WriteLine("Feburary: " + feb);
-                    Console.WriteLine("March: " + mar);
-                    Console.WriteLine("April: " + apr);
-                    Console.WriteLine("May: " + may);
-                    Console.WriteLine("June: " + jun);
-                    Console.WriteLine("July: " + jul);
-                    Console.WriteLine("August: " + aug);
-                    Console.WriteLine("September: " + sep);
-                    Console.WriteLine("October: " + oct);
-                    Console.WriteLine("November: " + nov);
-                    Console.WriteLine("December: " + dec);
                     subcat = driver.FindElement(By.ClassName("breadcrumb")).Text.ToString();
                     Console.WriteLine("Category: " + subcat);
-                    //driver.Navigate().Back();
                     System.Threading.Thread.Sleep(4000);
-                int[] mo = { jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec };
-                jan = 0; feb = 0; mar = 0; apr = 0; may = 0; jun = 0; jul = 0; aug = 0; sep = 0; oct = 0; nov = 0; dec = 0;
-                using (StreamWriter w = new StreamWriter("d.csv"))
-                {
-                    for (int k = 0; k < 12; k++)
+                    int[] mo = { jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec };
+                    jan = 0; feb = 0; mar = 0; apr = 0; may = 0; jun = 0; jul = 0; aug = 0; sep = 0; oct = 0; nov = 0; dec = 0;
+                    try
                     {
-                        var line = string.Format("{0},{1},{2},{3},{4},{5}", name, pri, cat, subcat, mo[k], months[k]);
-                        w.WriteLine(line);
-                        //w.Flush();
+
+                        using (StreamWriter w = new StreamWriter("d.csv", true))
+                        {
+                            for (int k = 0; k < 12; k++)
+                            {
+                                var line = string.Format("{0},{1},{2},{3},{4},{5},{6}", name, pstr, sku, cat, subcat, mo[k], months[k]);
+                                w.WriteLine(line);
+                                w.Flush();
+                            }
+                        }
                     }
-                }
-                //string Query = "INSERT INTO [Table](Name,Price,Rating,Category,Sub Category,Month) VALUES('" + name + "', '" + price + "', '" + jan + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + feb + "','" + cat + "','" + subcat + "','" + January + "') , " +
-                //    "('" + name + "', '" + price + "', '" + mar + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + apr + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + may + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + jun + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + jul + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + aug + "','" + cat + "','" + subcat + "','" + month + "'), " +
-                //    "('" + name + "', '" + price + "', '" + sep + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + oct + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + nov + "','" + cat + "','" + subcat + "','" + month + "') , " +
-                //    "('" + name + "', '" + price + "', '" + dec + "','" + cat + "','" + subcat + "','" + month + "')";
-                //SqlCommand cmd = new SqlCommand(Query, con);
-                //SqlDataReader myreader;
-                //try
-                //{
-                //    con.Open();
-                //    myreader = cmd.ExecuteReader();
-                //    Console.WriteLine("Data Saved");
-                //    while (myreader.Read()) { }
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine(e.Message);
-                //}
-                //con.Close();
-
-
-
-                /*foreach(var item in items)
-                {
-                    str = item.Text.ToString();
-                    Console.WriteLine(str);
-                    driver.FindElement(By.LinkText(str)).Click();
+                    catch(Exception)
+                    {
+                    }
                     driver.Navigate().Back();
-                }*/
-                //foreach(var p in price)
-                //{
-                //    Console.WriteLine(p.Text);
-                //    file.WriteLine(p.Text);
-                //}
-                //foreach (var item in items)
-                //{
-                //    Console.WriteLine(item.Text);
-                //    file.WriteLine(item.Text);
-                //}
-                // }
-                //catch(Exception e)
-                //{
-                //}
 
-            }
+                }
+                catch(StaleElementReferenceException e)
+                {
+                    Console.WriteLine(e);
+                }
+                catch(ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine(e);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                }
         }
     }
 }

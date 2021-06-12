@@ -1,3 +1,5 @@
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\Database1.mdf
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\Database1_log.ldf
 C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebScrapper.exe.config
 C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebScrapper.exe
 C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\WebScrapper.pdb
@@ -9,5 +11,5 @@ C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrappe
 C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.exe
 C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.pdb
 C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\obj\Debug\WebScrapper.csprojAssemblyReference.cache
-C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\Database1.mdf
-C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\Database1_log.ldf
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\SeleniumExtras.PageObjects.dll
+C:\Users\Administrator\source\repos\WebScrapper\WebScrapper\bin\Debug\SeleniumExtras.WaitHelpers.dll
